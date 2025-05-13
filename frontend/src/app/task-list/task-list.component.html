@@ -1,0 +1,37 @@
+<div class="container py-5">
+    <h2 class="text-center mb-4">📋 Lista de Tarefas</h2>
+  
+    <div class="input-group mb-4">
+      <input [(ngModel)]="newTask" class="form-control" placeholder="Nova tarefa..." />
+      <button (click)="addTask()" class="btn btn-primary">Adicionar</button>
+    </div>
+
+    <div class="input-group mb-4">
+        <input [(ngModel)]="searchTerm" (ngModelChange)="filterTasks()" class="form-control" placeholder="Buscar tarefas..." />
+    </div>
+  
+    <ul class="list-group">
+        <li *ngFor="let task of filteredTasks" class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="d-flex align-items-center gap-2" style="flex: 1;">
+            <ng-container *ngIf="editTaskId !== task._id; else editing">
+              <span [ngClass]="{'text-decoration-line-through text-muted': task.completed}" (click)="toggleTask(task)" style="cursor:pointer">
+                {{ task.name }}
+              </span>
+            </ng-container>
+      
+            <ng-template #editing>
+              <input [(ngModel)]="editedName" class="form-control form-control-sm" style="max-width: 300px;" />
+            </ng-template>
+          </div>
+      
+          <div class="btn-group btn-group-sm">
+            <button *ngIf="editTaskId !== task._id" class="btn btn-outline-secondary" (click)="startEdit(task)">✏️</button>
+            <ng-container *ngIf="editTaskId === task._id">
+              <button class="btn btn-success" (click)="saveEdit(task)">💾</button>
+              <button class="btn btn-outline-danger" (click)="cancelEdit()">✖</button>
+            </ng-container>
+            <button class="btn btn-outline-danger" (click)="deleteTask(task._id!)">🗑</button>
+          </div>
+        </li>
+      </ul>      
+  </div>
